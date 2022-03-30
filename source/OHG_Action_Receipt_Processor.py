@@ -1,20 +1,29 @@
-import pytesseract
-from pytesseract import Output
-from datetime import datetime
 import cv2
 import re
 import os
+import textwrap
+import json
 import shutil
 import pathlib
-from pdf2image import convert_from_path
+import pytesseract
+from pytesseract import Output
+from datetime import datetime
 from getkey import getkey
 from tkinter import *
 from tkinter import filedialog
 from PIL import Image
-import textwrap
-import json
+from pdf2image import convert_from_path
 
-# "database" is the working list of list that contains all extracted invoices
+# OHG Action - Service charge invoice scanning tool
+# E Spencer 2022 - ohgaction@gmail.com
+
+# This tool is designed to scan multiple invoice PDF files supplied by a
+# housing association to justify their service charges. The script exports
+# the receipts into a single spreadsheet so they can be quickly examined, or
+# checked to ensure the calculations are correct.
+
+# Note "database" is the working list of list that contains all
+# extracted invoices
 
 # Saves the current state of "database" and the folder path to disk
 def save_and_quit(database,path,script_path):
@@ -237,7 +246,7 @@ def trim_screen_text():
     print('[T] Accept Trim')
     print('Use [ and ] to trim the description')
     print('Use < and > to reduce the trim')
-    print("=================================================================")
+    print_line("thick")
 
 
 # This is the menu that allows you to navigate the "trim" selection screen
@@ -310,6 +319,27 @@ def trim_menu(input):
             return description
 
 
+# Gets the individual values, (i.e address, supplier etc) from the text
+# that has been extracted from the invoice by OCR
+def get_values_from_extraced_text(
+                                    return_text,contractors,
+                                    addresses,job_codes,
+    ):
+
+    return_text_no_commas = return_text.replace(',','')
+    date_text = serarch_date(return_text)
+    supplier = search_item(contractors, return_text)
+    address = search_item(addresses, return_text)
+    total_text = search_total(return_text_no_commas)
+    if date_text == [] or None:
+        date_text = ""
+    job_code = search_for_invoice_no(job_codes, return_text)
+
+    return date_text, supplier, address,\
+            total_text, job_code, return_text_no_commas
+
+
+# Extracts the text from the converted jpeg file using OCR
 def extract_data(
                     file, path, addresses,
                     contractors, job_codes, script_path
@@ -318,35 +348,39 @@ def extract_data(
     filename = f'{path}/{file}'
     convert_to_temp_jpeg(filename,script_path)
     return_text = extract_text_from_image(f'{script_path}/temp.jpg')
-    return_text_no_commas = return_text.replace(',','')
-    date_text = serarch_date(return_text)
-    supplier = search_item(contractors, return_text)
-    address = search_item(addresses, return_text)
-    total_text = search_total(return_text_no_commas)
-    if date_text == [] or None:
-        date_text = ""
-    job_code = search_for_invoice_no(job_codes, return_text)
-
-    return return_text, return_text_no_commas, date_text, supplier, address, total_text, job_code
 
 
+    date_text, supplier, address,\
+    total_text, job_code, return_text_no_commas = get_values_from_extraced_text(
+                                                        return_text,contractors,
+                                                        addresses,job_codes,
+    )
+
+    return return_text, return_text_no_commas,\
+           date_text, supplier, address, total_text, job_code
+
+
+# Rescans data from the information stored in the database, without having
+# to re-scan the JPEG file
 def extract_data_rescan(
                                 return_text, addresses,
                                 contractors, job_codes
 ):
 
-    return_text_no_commas = return_text.replace(',','')
-    date_text = serarch_date(return_text)
-    supplier = search_item(contractors, return_text)
-    address = search_item(addresses, return_text)
-    total_text = search_total(return_text_no_commas)
-    if date_text == [] or None:
-        date_text = ""
-    job_code = search_for_invoice_no(job_codes, return_text)
-
-    return return_text, return_text_no_commas, date_text, supplier, address, total_text, job_code
+    date_text, supplier, address,\
+    total_text, job_code,return_text_no_commas = get_values_from_extraced_text(
+                                                        return_text,contractors,
+                                                        addresses,job_codes,
+    )
 
 
+    return return_text, return_text_no_commas,\
+           date_text, supplier, address, total_text, job_code
+
+
+# Get a list of invoices from a specified folder path, check their file
+# extemnsion, if they're PDF files add the files into a list of files to be
+# processed
 def get_multiple_invoices_from_path(
                                         path,addresses,contractors,
                                         script_path,job_codes
@@ -397,6 +431,8 @@ def get_multiple_invoices_from_path(
     return database, no_files
 
 
+# Rescans multiple invoices from the infomation stored in the database,
+# rather than going back to the source PDF files. This is to improve speed
 def get_multiple_invoices_rescan(
                                     database,path,addresses,
                                     contractors,
@@ -429,6 +465,33 @@ def get_multiple_invoices_rescan(
     return database
 
 
+# Collects the fields needed before sending the information to rescanning
+def send_info_to_rescan
+                        value_to_add,index,index_number,
+                        database,path,script_path
+):
+
+    # Changes the database value at the specified index location
+    database[index][index_number] = value_to_add
+
+    if index_number == 4:
+        add_contractor(value_to_add)
+    if index_number == 5:
+        add_address(value_to_add)
+    addresses, contractors, job_codes = config(script_path)
+    new_database = get_multiple_invoices_rescan(
+                                    database,
+                                    path,addresses,
+                                    contractors,
+                                    script_path,
+                                    job_codes
+    )
+
+    return new_database
+
+
+# Processes the main menu selection options, I.e when 'f' is pressed it openes
+# a folder dialogue menu to select the input folder
 def main_menu_selection(script_path):
 
     path = script_path
@@ -471,6 +534,8 @@ def main_menu_selection(script_path):
             return database, no_files, path
 
 
+# Processes the invoice screen menu options, I.e when '[' or ']' are pressed it
+# scrolls the displayed invoice up or down
 def invoice_menu_selection(
                             index,path,addresses,contractors,
                             database,last_invoice,no_of_invoices,script_path
@@ -519,15 +584,14 @@ def invoice_menu_selection(
             filename = f'{path}/{file}'
             contractor_to_add = input("Please Enter Contractor: ")
             if contractor_to_add != "":
-                database[index][4] = contractor_to_add
-                add_contractor(contractor_to_add)
-                addresses, contractors, job_codes = config(script_path)
-                new_database = get_multiple_invoices_rescan(
-                                                database,
-                                                path,addresses,
-                                                contractors,
-                                                script_path,
-                                                job_codes
+
+                index_number = 4
+
+                new_database = send_info_to_rescan(
+                                                    contractor_to_add, index,
+                                                    index_number,
+                                                    database,path,
+                                                    script_path
                 )
 
                 invoice_menu(new_database,index,no_of_invoices,start,end)
@@ -541,16 +605,16 @@ def invoice_menu_selection(
             filename = f'{path}/{file}'
             address_to_add = input("Please Enter Address: ")
             if address_to_add != "":
-                database[index][5] = address_to_add
-                add_address(address_to_add)
-                addresses, contractors, job_codes = config(script_path)
-                new_database = get_multiple_invoices_rescan(
-                                                database,
-                                                path,addresses,
-                                                contractors,
-                                                script_path,
-                                                job_codes
+
+                index_number = 5
+
+                new_database = send_info_to_rescan(
+                                                    address_to_add, index,
+                                                    index_number,
+                                                    database,path,
+                                                    script_path
                 )
+
 
                 invoice_menu(new_database,index,no_of_invoices,start,end)
             else:
@@ -642,11 +706,14 @@ def invoice_menu_selection(
                 address = str(line[5]).replace(',','')
                 description = str(line[6]).replace(',','')
 
-                write_csv(f"{filename},{date},{total},{contractor},{address},{description}\n")
+                write_csv(f"{filename},{date},{total},\
+                          {contractor},{address},{description}\n"
+                )
 
             print(f"Exported to {script_path}/output.csv")
 
 
+# Displays a line on screen, either 'thick' or 'thin'
 def print_line(size):
     end = 65
     length = 0
@@ -661,6 +728,7 @@ def print_line(size):
     print(line)
 
 
+# Displays the main menu
 def main_menu(path):
 
     clear_screen()
@@ -745,7 +813,7 @@ def invoice_menu(database,index,no_of_invoices,start,end):
     print_line("thick")
 
 
-# Main function, launches the main menu
+# Main function, launches main menu
 def main():
 
     # Determins the location the script is being run from
