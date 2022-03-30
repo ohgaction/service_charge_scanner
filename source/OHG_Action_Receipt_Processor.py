@@ -27,9 +27,8 @@ from pdf2image import convert_from_path
 # Note "database" is the working list of list that contains all
 # extracted invoices
 
+
 # Saves the current state of "database" and the folder path to disk
-
-
 def save_and_quit(database, path, script_path):
 
     with open(f'{script_path}/data_save.dat', 'w') as f:
