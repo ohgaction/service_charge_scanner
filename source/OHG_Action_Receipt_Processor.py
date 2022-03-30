@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import cv2
 import re
 import os
@@ -26,7 +28,9 @@ from pdf2image import convert_from_path
 # extracted invoices
 
 # Saves the current state of "database" and the folder path to disk
-def save_and_quit(database,path,script_path):
+
+
+def save_and_quit(database, path, script_path):
 
     with open(f'{script_path}/data_save.dat', 'w') as f:
         f.write(json.dumps(database))
@@ -45,7 +49,7 @@ def restore(script_path):
     with open(f'{script_path}/path.dat', 'r') as f:
         path = json.loads(f.read())
 
-    return database,path
+    return database, path
 
 
 # Pulls a list of addresses and contractors from disk
@@ -105,17 +109,17 @@ def add_address(address):
 
 
 # Convers the current PDF file to a JPEG file so it's text can be scanned
-def convert_to_temp_jpeg(filepath,script_path):
+def convert_to_temp_jpeg(filepath, script_path):
 
     try:
 
-        if os.path.isfile(filepath) == True:
+        if os.path.isfile(filepath) is True:
             pages = convert_from_path(
-                                        filepath,
-                                        dpi=150,
-                                        grayscale=True,
-                                        fmt='jpeg',
-                                        jpegopt={"quality":100,"optomise":True}
+                                    filepath,
+                                    dpi=150,
+                                    grayscale=True,
+                                    fmt='jpeg',
+                                    jpegopt={"quality": 100, "optomise": True}
             )
 
             for page in pages:
@@ -190,19 +194,19 @@ def serarch_date(text):
 def date_sort(date):
 
     try:
-        datetimeobject = datetime.strptime(date,'%d/%m/%Y')
+        datetimeobject = datetime.strptime(date, '%d/%m/%Y')
         date = datetimeobject.strftime('%Y-%m-%d')
     except:
         try:
-            datetimeobject = datetime.strptime(date,'%d %B %Y')
+            datetimeobject = datetime.strptime(date, '%d %B %Y')
             date = datetimeobject.strftime('%Y-%m-%d')
         except:
             try:
-                datetimeobject = datetime.strptime(date,'%d.%m.%y')
+                datetimeobject = datetime.strptime(date, '%d.%m.%y')
                 date = datetimeobject.strftime('%Y-%m-%d')
             except:
                 try:
-                    datetimeobject = datetime.strptime(date,'%d.%m.%Y')
+                    datetimeobject = datetime.strptime(date, '%d.%m.%Y')
                     date = datetimeobject.strftime('%Y-%m-%d')
                 except:
                     date = ""
@@ -225,7 +229,7 @@ def display_image(img, file):
     test.show()
 
 
-# Clears the termiaal
+# Clears the termiaal
 def clear_screen():
 
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -322,11 +326,11 @@ def trim_menu(input):
 # Gets the individual values, (i.e address, supplier etc) from the text
 # that has been extracted from the invoice by OCR
 def get_values_from_extraced_text(
-                                    return_text,contractors,
-                                    addresses,job_codes,
-    ):
+                                    return_text, contractors,
+                                    addresses, job_codes,
+):
 
-    return_text_no_commas = return_text.replace(',','')
+    return_text_no_commas = return_text.replace(',', '')
     date_text = serarch_date(return_text)
     supplier = search_item(contractors, return_text)
     address = search_item(addresses, return_text)
@@ -336,7 +340,7 @@ def get_values_from_extraced_text(
     job_code = search_for_invoice_no(job_codes, return_text)
 
     return date_text, supplier, address,\
-            total_text, job_code, return_text_no_commas
+        total_text, job_code, return_text_no_commas
 
 
 # Extracts the text from the converted jpeg file using OCR
@@ -346,18 +350,18 @@ def extract_data(
 ):
 
     filename = f'{path}/{file}'
-    convert_to_temp_jpeg(filename,script_path)
+    convert_to_temp_jpeg(filename, script_path)
     return_text = extract_text_from_image(f'{script_path}/temp.jpg')
 
-
     date_text, supplier, address,\
-    total_text, job_code, return_text_no_commas = get_values_from_extraced_text(
-                                                        return_text,contractors,
-                                                        addresses,job_codes,
-    )
+        total_text, job_code,\
+        return_text_no_commas = get_values_from_extraced_text(
+                            return_text, contractors,
+                            addresses, job_codes
+        )
 
     return return_text, return_text_no_commas,\
-           date_text, supplier, address, total_text, job_code
+        date_text, supplier, address, total_text, job_code
 
 
 # Rescans data from the information stored in the database, without having
@@ -368,22 +372,22 @@ def extract_data_rescan(
 ):
 
     date_text, supplier, address,\
-    total_text, job_code,return_text_no_commas = get_values_from_extraced_text(
-                                                        return_text,contractors,
-                                                        addresses,job_codes,
-    )
-
+        total_text, job_code,\
+        return_text_no_commas = get_values_from_extraced_text(
+                                return_text, contractors,
+                                addresses, job_codes,
+        )
 
     return return_text, return_text_no_commas,\
-           date_text, supplier, address, total_text, job_code
+        date_text, supplier, address, total_text, job_code
 
 
 # Get a list of invoices from a specified folder path, check their file
 # extemnsion, if they're PDF files add the files into a list of files to be
 # processed
 def get_multiple_invoices_from_path(
-                                        path,addresses,contractors,
-                                        script_path,job_codes
+                                        path, addresses, contractors,
+                                        script_path, job_codes
 ):
 
     database = []
@@ -411,11 +415,11 @@ def get_multiple_invoices_from_path(
         print(f"Scanning: {sorted_file}...")
 
         return_text, return_text_no_commas, date_text, supplier,\
-        address, total_text, job_code = extract_data(
+            address, total_text, job_code = extract_data(
                                         sorted_file, path,
                                         addresses, contractors,
                                         job_codes, script_path
-        )
+            )
 
         item = []
         item.append(return_text)
@@ -434,7 +438,7 @@ def get_multiple_invoices_from_path(
 # Rescans multiple invoices from the infomation stored in the database,
 # rather than going back to the source PDF files. This is to improve speed
 def get_multiple_invoices_rescan(
-                                    database,path,addresses,
+                                    database, path, addresses,
                                     contractors,
                                     script_path, job_codes
 ):
@@ -444,11 +448,11 @@ def get_multiple_invoices_rescan(
         text_to_rescan = line[0]
 
         return_text, return_text_no_commas, date_text,\
-        supplier, address, total_text, job_code = extract_data_rescan(
+            supplier, address, total_text, job_code = extract_data_rescan(
                                                     text_to_rescan, addresses,
                                                     contractors,
                                                     job_codes
-        )
+            )
 
         database[i][0] = return_text
         database[i][2] = date_text
@@ -467,8 +471,8 @@ def get_multiple_invoices_rescan(
 
 # Collects the fields needed before sending the information to rescanning
 def send_info_to_rescan(
-                        value_to_add,index,index_number,
-                        database,path,script_path
+                        value_to_add, index, index_number,
+                        database, path, script_path
 ):
 
     # Changes the database value at the specified index location
@@ -481,7 +485,7 @@ def send_info_to_rescan(
     addresses, contractors, job_codes = config(script_path)
     new_database = get_multiple_invoices_rescan(
                                     database,
-                                    path,addresses,
+                                    path, addresses,
                                     contractors,
                                     script_path,
                                     job_codes
@@ -520,8 +524,9 @@ def main_menu_selection(script_path):
             invoices = os.listdir(os.path.expanduser(path))
             if invoices != []:
                 database, no_files = get_multiple_invoices_from_path(
-                                                    path,addresses,contractors,
-                                                    script_path,job_codes
+                                                    path, addresses,
+                                                    contractors,
+                                                    script_path, job_codes
                 )
                 return database, no_files, path
             else:
@@ -530,15 +535,15 @@ def main_menu_selection(script_path):
         if key == 'r':
 
             no_files = False
-            database,path = restore(script_path)
+            database, path = restore(script_path)
             return database, no_files, path
 
 
 # Processes the invoice screen menu options, I.e when '[' or ']' are pressed it
 # scrolls the displayed invoice up or down
 def invoice_menu_selection(
-                            index,path,addresses,contractors,
-                            database,last_invoice,no_of_invoices,script_path
+                            index, path, addresses, contractors,
+                            database, last_invoice, no_of_invoices, script_path
 ):
 
     long_text = database[index][0]
@@ -564,7 +569,7 @@ def invoice_menu_selection(
             if end - start < 20:
                 start = end - 20
 
-            invoice_menu(database,index,no_of_invoices,start,end)
+            invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == ']':
 
@@ -575,7 +580,7 @@ def invoice_menu_selection(
                 start = 0
             if end < 20:
                 end = 20
-            invoice_menu(database,index,no_of_invoices,start,end)
+            invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == "a":
 
@@ -590,13 +595,13 @@ def invoice_menu_selection(
                 new_database = send_info_to_rescan(
                                                     contractor_to_add, index,
                                                     index_number,
-                                                    database,path,
+                                                    database, path,
                                                     script_path
                 )
 
-                invoice_menu(new_database,index,no_of_invoices,start,end)
+                invoice_menu(new_database, index, no_of_invoices, start, end)
             else:
-                invoice_menu(database,index,no_of_invoices,start,end)
+                invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == "d":
 
@@ -611,37 +616,35 @@ def invoice_menu_selection(
                 new_database = send_info_to_rescan(
                                                     address_to_add, index,
                                                     index_number,
-                                                    database,path,
+                                                    database, path,
                                                     script_path
                 )
 
-
-                invoice_menu(new_database,index,no_of_invoices,start,end)
+                invoice_menu(new_database, index, no_of_invoices, start, end)
             else:
-                invoice_menu(database,index,no_of_invoices,start,end)
+                invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == "c":
 
             line = database[index]
             file = line[1]
             new_total = input("Please Enter new total: ")
-            new_total = new_total.replace('£','')
-            new_total = new_total.replace('$','')
+            new_total = new_total.replace('£', '')
+            new_total = new_total.replace('$', '')
             if new_total != "":
                 addresses, contractors, job_codes = config(script_path)
                 database[index][3] = new_total
                 new_database = get_multiple_invoices_rescan(
                                                 database,
-                                                path,addresses,
+                                                path, addresses,
                                                 contractors,
                                                 script_path,
                                                 job_codes
                 )
 
-                invoice_menu(new_database,index,no_of_invoices,start,end)
+                invoice_menu(new_database, index, no_of_invoices, start, end)
             else:
-                invoice_menu(database,index,no_of_invoices,start,end)
-
+                invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == "t":
 
@@ -651,20 +654,20 @@ def invoice_menu_selection(
             database[index][6] = trim_menu(long_text)
             new_database = get_multiple_invoices_rescan(
                                             database,
-                                            path,addresses,
+                                            path, addresses,
                                             contractors,
                                             script_path,
                                             job_codes
             )
 
-            invoice_menu(new_database,index,no_of_invoices,start,end)
+            invoice_menu(new_database, index, no_of_invoices, start, end)
 
         if key == "s":
 
             line = database[index]
             file = line[1]
             filename = f'{path}/{file}'
-            convert_to_temp_jpeg(filename,script_path)
+            convert_to_temp_jpeg(filename, script_path)
             display_image(f'{script_path}/temp.jpg', file)
 
         if key == '.':
@@ -674,7 +677,7 @@ def invoice_menu_selection(
             end = 20
             if index > last_invoice:
                 index = last_invoice
-            invoice_menu(database,index,no_of_invoices,start,end)
+            invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == ',':
 
@@ -683,11 +686,11 @@ def invoice_menu_selection(
             end = 20
             if index < 0:
                 index = 0
-            invoice_menu(database,index,no_of_invoices,start,end)
+            invoice_menu(database, index, no_of_invoices, start, end)
 
         if key == 'q':
 
-            save_and_quit(database,path,script_path)
+            save_and_quit(database, path, script_path)
             clear_screen()
             quit()
 
@@ -699,16 +702,15 @@ def invoice_menu_selection(
 
                 # Remove ',' from items sent to CSV, this avoids
                 # accidentally creating columns you do not want to create
-                filename = str(line[1]).replace(',','')
-                date = str(line[2]).replace(',','')
-                total = str(line[3]).replace(',','')
-                contractor = str(line[4]).replace(',','')
-                address = str(line[5]).replace(',','')
-                description = str(line[6]).replace(',','')
+                filename = str(line[1]).replace(',', '')
+                date = str(line[2]).replace(',', '')
+                total = str(line[3]).replace(',', '')
+                contractor = str(line[4]).replace(',', '')
+                address = str(line[5]).replace(',', '')
+                description = str(line[6]).replace(',', '')
 
                 write_csv(f"{filename},{date},{total},\
-                          {contractor},{address},{description}\n"
-                )
+                          {contractor},{address},{description}\n")
 
             print(f"Exported to {script_path}/output.csv")
 
@@ -748,7 +750,7 @@ def main_menu(path):
 
 # Displays the invoice within the invoice menu, and permits the user to scroll
 # up and down across the invoice
-def show_invoice(input,start,end):
+def show_invoice(input, start, end):
 
     invoice_list = input.split('\n')
     end_of_invoice_list = len(invoice_list)
@@ -766,11 +768,11 @@ def show_invoice(input,start,end):
     for line in show_list:
         print(line)
 
-    return start,end
+    return start, end
 
 
 # This displays the standard menu within terminal for browsing invoices
-def invoice_menu(database,index,no_of_invoices,start,end):
+def invoice_menu(database, index, no_of_invoices, start, end):
 
     clear_screen()
 
@@ -788,7 +790,7 @@ def invoice_menu(database,index,no_of_invoices,start,end):
     print('Extracted Text:')
     print_line("thick")
 
-    show_invoice(return_text,start,end)
+    show_invoice(return_text, start, end)
 
     filename = f'{line[1]}'
     date = f'{line[2]}'
@@ -829,20 +831,20 @@ def main():
     start = 0
     end = 20
 
-    if no_files == False:
+    if no_files is False:
 
         no_of_invoices = len(database)
         last_invoice = no_of_invoices - 1
 
-        invoice_menu(database,index,no_of_invoices,start,end)
+        invoice_menu(database, index, no_of_invoices, start, end)
 
         invoice_menu_selection(
-                                index,path,addresses,contractors,
-                                database,last_invoice,
-                                no_of_invoices,script_path
+                                index, path, addresses, contractors,
+                                database, last_invoice,
+                                no_of_invoices, script_path
         )
 
-    if no_files == True:
+    if no_files is True:
         main()
 
 
