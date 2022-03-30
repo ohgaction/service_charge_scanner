@@ -466,7 +466,7 @@ def get_multiple_invoices_rescan(
 
 
 # Collects the fields needed before sending the information to rescanning
-def send_info_to_rescan
+def send_info_to_rescan(
                         value_to_add,index,index_number,
                         database,path,script_path
 ):
