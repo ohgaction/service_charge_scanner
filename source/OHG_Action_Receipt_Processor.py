@@ -73,16 +73,16 @@ def config(script_path):
 
 
 # Wipes the output.csv file from the scipt directory
-def wipe_csv():
+def wipe_csv(script_path):
 
-    open(f'output.csv', 'w').close()
+    open(f'{script_path}/output.csv', 'w').close()
 
 
 # appends a line to the output.csv file, and outputs the extracted data
-def write_csv(input):
+def write_csv(script_path,input):
 
     try:
-        with open(f'output.csv', 'a', encoding='utf-8') as f:
+        with open(f'{script_path}/output.csv', 'a', encoding='utf-8') as f:
             f.write(input)
 
     except:
@@ -456,11 +456,17 @@ def get_multiple_invoices_rescan(
         database[i][0] = return_text
         database[i][2] = date_text
         database[i][3] = database[i][3]
+
         if database[i][4] == "":
             database[i][4] = supplier
         else:
             database[i][4] = database[i][4]
-        database[i][5] = address
+
+        if database[i][5] == "":
+            database[i][5] = address
+        else:
+            database[i][5] = database[i][5]
+
         database[i][6] = database[i][6]
         database[i][7] = job_code
         i = i + 1
@@ -695,7 +701,7 @@ def invoice_menu_selection(
 
         if key == 'x':
 
-            wipe_csv()
+            wipe_csv(script_path)
 
             for line in database:
 
@@ -708,7 +714,7 @@ def invoice_menu_selection(
                 address = str(line[5]).replace(',', '')
                 description = str(line[6]).replace(',', '')
 
-                write_csv(f"{filename},{date},{total},\
+                write_csv(script_path,f"{filename},{date},{total},\
                           {contractor},{address},{description}\n")
 
             print(f"Exported to {script_path}/output.csv")
@@ -816,6 +822,9 @@ def invoice_menu(database, index, no_of_invoices, start, end):
 
 # Main function, launches main menu
 def main():
+
+#    os.system("mode con lines=20") - For Windows Resize
+#    os.system("mode con cols=50")
 
     # Determins the location the script is being run from
     script_path = os.path.dirname(os.path.realpath(__file__))
