@@ -62,37 +62,37 @@ https://www.microsoft.com/en-gb/download/details.aspx?id=48145
 
 * Open the **.exe** file that downloads and follow the onscreen instructions to install
 
-**Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
+* **Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
 
 2. Next you need to install **Python**. Python is the programming language the script has been made with. This can be downloaded from here.
 
 https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe
 
-Run the python installer.
+* Run the python installer.
 
-**Make sure to tick the box at the bottom of the menu that says Add Python 3.10 to Path and then click on Install Now**
+* **Make sure to tick the box at the bottom of the menu that says Add Python 3.10 to Path and then click on Install Now**
 
 3. Click on the **Start** button in Windows and type **PowerShell**. Right-click on Windows **PowerShell** and select **Run as Administrator**
 
-Type the following command (copy & paste) into **PowerShell** and hit enter:
+* Type the following command (copy & paste) into **PowerShell** and hit enter:
 
 > pip install –upgrade pip
 
-Once pip has finished updating, please enter the following command (copy & paste).
+* Once pip has finished updating, please enter the following command (copy & paste).
 
 > pip3 install tk opencv-python keyboard pytesseract pdf2image
 
-This will install the python dependencies.
+* This will install the python dependencies.
 
 4. Now you need to download the script from github. Please download from this link, and click download in the right hand corner:
 
 https://github.com/ohgaction/service_charge_scanner/blob/main/downloads/Invoice_scanner_Windows.zip
 
-Once the **.zip** file is downloaded, please move or copy it to the desktop
+* Once the **.zip** file is downloaded, please move or copy it to the desktop
 
-Right click on the **.zip** file and select **Extract All**
+* Right click on the **.zip** file and select **Extract All**
 
-Please delete the end of the path which says **Invoice_scanner_Windows**. The address will be extracted to will look like the below example:
+* Please delete the end of the path which says **Invoice_scanner_Windows**. The address will be extracted to will look like the below example:
 
 > C:\Users\{Your_User_Name_Here}\Desktop\
 
@@ -100,47 +100,47 @@ Please delete the end of the path which says **Invoice_scanner_Windows**. The ad
 
 https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.0.1.20220118.exe
 
-Please open the **.exe** file that is downloaded and follow the instructions
+* Please open the **.exe** file that is downloaded and follow the instructions
 
-Please make sure to install Tesseract into the default location **(C:\Program Files\Tesseract-OCR)**
+* Please make sure to install Tesseract into the default location **(C:\Program Files\Tesseract-OCR)**
 
 6. Now you need to install **poppler**. This is software which converts PDF files to image files. We use poppler to convert PDFs into JPEG files temporarily so that the OCR software can read them. Please use this link to download poppler:
 
 https://github.com/oschwartz10612/poppler-windows/releases/download/v22.01.0-0/Release-22.01.0-0.zip
 
-Once the .zip file is downloaded, please open it. Right click on the folder called **poppler-22.01.0** and click **cut**
+* Once the .zip file is downloaded, please open it. Right click on the folder called **poppler-22.01.0** and click **cut**
 
-Now navigate to your Desktop, where we put the script folder. Please open the folder called **Invoice_scanner_Windows**. Now right-click and select **Paste**.
+* Now navigate to your Desktop, where we put the script folder. Please open the folder called **Invoice_scanner_Windows**. Now right-click and select **Paste**.
 
 7. The final step is to set an **environmental variable**. This is so that poppler will work from the command line, and permit the script to run.
 
-Click on the start menu and type **View Advanced System Settings**. Open this
+* Click on the start menu and type **View Advanced System Settings**. Open this
 
-In the bottom right of the menu, select **Enviroment Variables**
+* In the bottom right of the menu, select **Enviroment Variables**
 
-In the bottom half of the next window, highlight **Path** and select **Edit**
+* In the bottom half of the next window, highlight **Path** and select **Edit**
 
-Click New and then **Browse** to the following directory **Desktop\Invoice_scanner_Windows\poppler-20.01.0\Library\bin**
+* Click New and then **Browse** to the following directory **Desktop\Invoice_scanner_Windows\poppler-20.01.0\Library\bin**
 
-Click Ok. Make sure to close **PowerShell** if it’s open
+* Click Ok. Make sure to close **PowerShell** if it’s open
 
 8. Relaunch **PowerShell** from the start menu, right clicking again to launch it as an Administrator. Type ‘python’ making sure to leave a space. Next drag the file called OHG_Action_Receipt_Processor.py from the Invoice_scanner_Windows folder on your desktop into the **PowerShell** window. This should look something like this:
 
 > python C:\Users\{Your_User_Name_Here}\Desktop\Invoice_scanner_Windows\OHG_Action_Receipt_Processor.py
 
-Press Enter and the script should run
+* Press Enter and the script should run
 
 ## Installation (macOS)
 
 1. Open Terminal
 
-You can do this by clicking on the magnifying glass in the top right hand corner of the screen.
+* You can do this by clicking on the magnifying glass in the top right hand corner of the screen.
 
-Type:
+* Type:
 
 > su
 
-Press Enter. This command elevates Terminal so you can run as a super user. You will be prompted for your password. Note that when you type it, it will not display on the screen. Press enter.
+* Press Enter. This command elevates Terminal so you can run as a super user. You will be prompted for your password. Note that when you type it, it will not display on the screen. Press enter.
 
 2. Next, you need to install **Brew**. This is a package manager for macOS. To install Brew simply copy and paste the entire text below into terminal and hit enter.
 
@@ -161,18 +161,18 @@ Press Enter. This command elevates Terminal so you can run as a super user. You 
 6. Now download the script from this location:
 https://github.com/ohgaction/service_charge_scanner/blob/main/downloads/invoice_scanner_macOS.zip
 
-Click on the **Download** link to the right of the screen.
+* Click on the **Download** link to the right of the screen.
 
-Please move this **.zip** file to your Desktop. You can do this in Chrome by clicking **Show in Finder** on the file you’ve just downloaded.
+* Please move this **.zip** file to your Desktop. You can do this in Chrome by clicking **Show in Finder** on the file you’ve just downloaded.
 
-Now drag the **.zip** file to your desktop:
+* Now drag the **.zip** file to your desktop:
 
-Double click the **.zip** file on the desktop, and it will expand into a folder:
+* Double click the **.zip** file on the desktop, and it will expand into a folder:
 
-You can drag the **.zip** file to the Recycling bin now as you’re done with it.
+* You can drag the **.zip** file to the Recycling bin now as you’re done with it.
 
 7. Now we’re ready to run the script. To do this, please go back to Terminal and type (or copy and paste)
 
 > python ~/Desktop/Invoice_scanner_macOS/OHG_Action_Receipt_Processor.py
 
-The script will now launch
+* The script will now launch
