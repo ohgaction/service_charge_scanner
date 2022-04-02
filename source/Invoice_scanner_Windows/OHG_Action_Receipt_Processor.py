@@ -20,7 +20,8 @@ from pdf2image.exceptions import (
     PDFPageCountError,
     PDFSyntaxError
 )
-# from pdf2image import convert_from_path
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # OHG Action - Service charge invoice scanning tool
 # E Spencer 2022 - ohgaction@gmail.com
@@ -124,9 +125,8 @@ def convert_to_temp_jpeg(filepath, script_path):
                                     dpi=150,
                                     grayscale=True,
                                     fmt='jpeg',
-                                    jpegopt={"quality": 100, "optomise": True},
-                                    poppler_path=r"c:/Users/Administrator/Desktop/Invoice_Scanner/poppler/Library/bin/"
-        )
+                                    jpegopt={"quality": 100, "optomise": True}
+            )
 
             for page in pages:
                 page.save(f'{script_path}/temp.jpg', 'JPEG')
