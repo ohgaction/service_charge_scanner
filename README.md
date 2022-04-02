@@ -36,7 +36,9 @@ The total is automatically calculated by creating a list of totals from the rece
 
 You can use the **S** key at any time to show you the original PDF file
 
-The Trim description can be used if you press the T key. You can now use the [ and the ] keys to trim down the receipt data to only show the description. Press T again to save this. In the next version, I'm going to look at doing this automatically using machine learning to detect descriptions.
+### How to extract a description
+
+The Trim description can be used if you press the **T** key. You can now use the [ and the ] keys to trim down the receipt data to only show the description. Press T again to save this. In the next version, I'm going to look at doing this automatically using machine learning to detect descriptions.
 
 ### How to export results into a spreadsheet
 
@@ -56,9 +58,9 @@ In the final version, it will automatically export Excel files and will allow yo
 
 https://www.microsoft.com/en-gb/download/details.aspx?id=48145
 
-When asked, select the **vc_dedist.x64.exe.**
+* When asked, select the **vc_dedist.x64.exe.**
 
-Open the **.exe** file that downloads and follow the onscreen instructions to install
+* Open the **.exe** file that downloads and follow the onscreen instructions to install
 
 **Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
 
