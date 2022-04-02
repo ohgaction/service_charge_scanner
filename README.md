@@ -8,9 +8,9 @@ The next iteration will use machine learning to do this more automatically with 
 
 Please follow the installation instructions below for how to get started and launch the invoice scanner.
 
-When you run the scanner, you press the F key to select a folder of receipts to scan. A dialogue window will appear. Select where you've saved your PDF files.
+When you run the scanner, you press the **F** key to select a folder of receipts to scan. A dialogue window will appear. Select where you've saved your PDF files.
 
-Press the P key and it will start processing. Once it has finished it will display a text display of each receipt. You can navigate between the receipts using the < or > keys, and you can scroll up and down using [ and ] keys (you may need to stretch the terminal window open a bit, as it sometimes crops the top of the display)
+Press the **P** key and it will start processing. Once it has finished it will display a text display of each receipt. You can navigate between the receipts using the < or > keys, and you can scroll up and down using [ and ] keys (you may need to stretch the terminal window open a bit, as it sometimes crops the top of the display)
 
 Below the scrolling part, which shows the text it has extracted from the invoice, you will see the fields it has collated. If the contractor is not displayed, I recommend copying the name of the contractor from the extracted text.
 
@@ -40,7 +40,7 @@ The first thing you’ll need to install is an update to Windows called Visual C
 
 https://www.microsoft.com/en-gb/download/details.aspx?id=48145
 
-When asked, select the vc_dedist.x64.exe.
+When asked, select the **vc_dedist.x64.exe.**
 
 Open the .exe file that downloads and follow the onscreen instructions to install
 
@@ -58,11 +58,11 @@ Click on the Start button in Windows and type Powershell. Right-click on Windows
 
 Type the following command (copy & paste) into Powershell and hit enter:
 
-pip install –upgrade pip
+> pip install –upgrade pip
 
 Once pip has finished updating, please enter the following command (copy & paste).
 
-pip3 install tk opencv-python keyboard pytesseract pdf2image
+> pip3 install tk opencv-python keyboard pytesseract pdf2image
 
 This will install the python dependencies.
 
@@ -82,9 +82,9 @@ https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.0.1.202201
 
 Please open the .exe file that is downloaded and follow the instructions
 
-Please make sure to install Tesseract into the default location (C:\Program Files\Tesseract-OCR)
+Please make sure to install Tesseract into the default location **(C:\Program Files\Tesseract-OCR)**
 
-Now you need to install poppler. This is software which converts PDF files to image files. We use poppler to convert PDFs into JPEG files temporarily so that the OCR software can read them. Please use this link to download poppler:
+Now you need to install **poppler**. This is software which converts PDF files to image files. We use poppler to convert PDFs into JPEG files temporarily so that the OCR software can read them. Please use this link to download poppler:
 
 https://github.com/oschwartz10612/poppler-windows/releases/download/v22.01.0-0/Release-22.01.0-0.zip
 
@@ -118,25 +118,25 @@ You can do this by clicking on the magnifying glass in the top right hand corner
 
 Type:
 
-su
+> su
 
 And press Enter. This command elevates Terminal so you can run as a super user. You will be prompted for your password,. Note that when you type it, it will not display. Press enter.
 
 Next, you need to install Brew. This is a package manager for macOS. To install Brew simply copy and paste the entire text below into terminal and hit enter.
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 Next we can install Python. Python is the programming language that is used to write this script. To install python simply type the following
 
-brew install python
+> brew install python
 
 Next we need to install tesseract. This is the plugin that reads an image and converts it to text using OCR character recognition. We do this by typing
 
-brew install tesseract
+> brew install tesseract
 
 Next we need to install the python dependencies for the script to actually run. Please copy and paste the line below into Terminal
 
-pip3 install tk pdf2image opencv-python json getkey pytesseract
+> pip3 install tk pdf2image opencv-python json getkey pytesseract
 
 Now download the script from this location:
 https://github.com/ohgaction/service_charge_scanner/blob/main/downloads/invoice_scanner_macOS.zip
@@ -153,6 +153,6 @@ You can drag the .zip file to the Recycling bin now as you’re done with it.
 
 Now we’re ready to run the script. To do this, please go back to Terminal and type (or copy and paste)
 
-python ~/Desktop/Invoice_Scanner/OHG_Action_Receipt_Processor.py
+> python ~/Desktop/Invoice_Scanner/OHG_Action_Receipt_Processor.py
 
 The script will now launch
