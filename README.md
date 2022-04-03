@@ -183,6 +183,6 @@ Now we’re ready to run the script. To do this, please go back to Terminal and 
 
 The script will now launch
 
-### License
+## License
 
 Licensed under GNU General Public License. See LICENSE.md.
