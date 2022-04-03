@@ -174,3 +174,7 @@ Now we’re ready to run the script. To do this, please go back to Terminal and 
 `python ~/Desktop/Invoice_scanner_macOS/OHG_Action_Receipt_Processor.py`
 
 The script will now launch
+
+### License
+
+Licensed under GNU General Public License. See LICENSE.md.
