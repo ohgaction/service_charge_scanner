@@ -6,7 +6,7 @@ This tool currently works by searching text extracted from PDF files, looking fo
 
 The next iteration will use machine learning to do this more automatically with less input. However, for now, I think it's still very useful for people to scan large numbers of receipts in an hour or two rather than the days it would otherwise take
 
-## Prerequisits
+## Prerequisites
 
 * Python 3.10
 * tk
