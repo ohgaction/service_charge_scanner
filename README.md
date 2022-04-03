@@ -52,17 +52,17 @@ In the final version, it will automatically export Excel files and will allow yo
 
 ## Installation (Windows)
 
-1. The first thing you’ll need to install is an update to Windows called **Visual C++ Redistributable for Visual Studio 2015**. You can download this using the following link:
+The first thing you’ll need to install is an update to Windows called **Visual C++ Redistributable for Visual Studio 2015**. You can download this using the following link:
 
 https://www.microsoft.com/en-gb/download/details.aspx?id=48145
 
-  When asked, select the **vc_dedist.x64.exe.**
+When asked, select the **vc_dedist.x64.exe.**
 
-  Open the **.exe** file that downloads and follow the onscreen instructions to install
+Open the **.exe** file that downloads and follow the onscreen instructions to install
 
-  **Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
+**Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
 
-2. Next you need to install **Python**. Python is the programming language the script has been made with. This can be downloaded from here.
+Next you need to install **Python**. Python is the programming language the script has been made with. This can be downloaded from here.
 
 https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe
 
@@ -70,7 +70,7 @@ Run the python installer.
 
 **Make sure to tick the box at the bottom of the menu that says Add Python 3.10 to Path and then click on Install Now**
 
-3. Click on the **Start** button in Windows and type **PowerShell**. Right-click on Windows **PowerShell** and select **Run as Administrator**
+Click on the **Start** button in Windows and type **PowerShell**. Right-click on Windows **PowerShell** and select **Run as Administrator**
 
 Type the following command (copy & paste) into **PowerShell** and hit enter:
 
@@ -82,7 +82,7 @@ Once pip has finished updating, please enter the following command (copy & paste
 
 This will install the python dependencies.
 
-4. Now you need to download the script from github. Please download from this link, and click download in the right hand corner:
+Now you need to download the script from github. Please download from this link, and click download in the right hand corner:
 
 https://github.com/ohgaction/service_charge_scanner/blob/main/downloads/Invoice_scanner_Windows.zip
 
@@ -94,7 +94,7 @@ Please delete the end of the path which says **Invoice_scanner_Windows**. The ad
 
 `C:\Users\{Your_User_Name_Here}\Desktop\`
 
-5. You need to install **Tesseract**. This is the actual OCR software that is used by the script to read text from images. You can download tesseract from the following link:
+You need to install **Tesseract**. This is the actual OCR software that is used by the script to read text from images. You can download tesseract from the following link:
 
 https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.0.1.20220118.exe
 
@@ -102,7 +102,7 @@ Please open the **.exe** file that is downloaded and follow the instructions
 
 Please make sure to install Tesseract into the default location `C:\Program Files\Tesseract-OCR`
 
-6. Now you need to install **poppler**. This is software which converts PDF files to image files. We use poppler to convert PDFs into JPEG files temporarily so that the OCR software can read them. Please use this link to download poppler:
+Now you need to install **poppler**. This is software which converts PDF files to image files. We use poppler to convert PDFs into JPEG files temporarily so that the OCR software can read them. Please use this link to download poppler:
 
 https://github.com/oschwartz10612/poppler-windows/releases/download/v22.01.0-0/Release-22.01.0-0.zip
 
@@ -110,7 +110,7 @@ Once the .zip file is downloaded, please open it. Right click on the folder call
 
 Now navigate to your Desktop, where we put the script folder. Please open the folder called **Invoice_scanner_Windows**. Now right-click and select **Paste**.
 
-7. The final step is to set an **environmental variable**. This is so that poppler will work from the command line, and permit the script to run.
+The final step is to set an **environmental variable**. This is so that poppler will work from the command line, and permit the script to run.
 
 Click on the start menu and type **View Advanced System Settings**. Open this
 
@@ -122,7 +122,7 @@ Click New and then **Browse** to the following directory **Desktop\Invoice_scann
 
 Click Ok. Make sure to close **PowerShell** if it’s open
 
-8. Relaunch **PowerShell** from the start menu, right clicking again to launch it as an Administrator. Type ‘python’ making sure to leave a space. Next drag the file called OHG_Action_Receipt_Processor.py from the Invoice_scanner_Windows folder on your desktop into the **PowerShell** window. This should look something like this:
+Relaunch **PowerShell** from the start menu, right clicking again to launch it as an Administrator. Type ‘python’ making sure to leave a space. Next drag the file called OHG_Action_Receipt_Processor.py from the Invoice_scanner_Windows folder on your desktop into the **PowerShell** window. This should look something like this:
 
 `python C:\Users\{Your_User_Name_Here}\Desktop\Invoice_scanner_Windows\OHG_Action_Receipt_Processor.py`
 
@@ -130,7 +130,7 @@ Press Enter and the script should run
 
 ## Installation (macOS)
 
-1. Open Terminal
+Open Terminal
 
 You can do this by clicking on the magnifying glass in the top right hand corner of the screen.
 
@@ -140,23 +140,23 @@ Type:
 
 Press Enter. This command elevates Terminal so you can run as a super user. You will be prompted for your password. Note that when you type it, it will not display on the screen. Press enter.
 
-2. Next, you need to install **Brew**. This is a package manager for macOS. To install Brew simply copy and paste the entire text below into terminal and hit enter.
+Next, you need to install **Brew**. This is a package manager for macOS. To install Brew simply copy and paste the entire text below into terminal and hit enter.
 
 `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
-3. Next we can install **Python**. Python is the programming language that is used to write this script. To install python simply type the following
+Next we can install **Python**. Python is the programming language that is used to write this script. To install python simply type the following
 
 `brew install pytho`
 
-4. Next we need to install **Tesseract**. This is the plugin that reads an image and converts it to text using OCR character recognition. We do this by typing
+Next we need to install **Tesseract**. This is the plugin that reads an image and converts it to text using OCR character recognition. We do this by typing
 
 `brew install tesseract`
 
-5. Next we need to install the **python dependencies** for the script to actually run. Please copy and paste the line below into Terminal
+Next we need to install the **python dependencies** for the script to actually run. Please copy and paste the line below into Terminal
 
 `pip3 install tk pdf2image opencv-python json getkey pytesseract`
 
-6. Now download the script from this location:
+Now download the script from this location:
 https://github.com/ohgaction/service_charge_scanner/blob/main/downloads/invoice_scanner_macOS.zip
 
 Click on the **Download** link to the right of the screen.
@@ -169,7 +169,7 @@ Double click the **.zip** file on the desktop, and it will expand into a folder:
 
 You can drag the **.zip** file to the Recycling bin now as you’re done with it.
 
-7. Now we’re ready to run the script. To do this, please go back to Terminal and type (or copy and paste)
+Now we’re ready to run the script. To do this, please go back to Terminal and type (or copy and paste)
 
 `python ~/Desktop/Invoice_scanner_macOS/OHG_Action_Receipt_Processor.py`
 
