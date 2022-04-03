@@ -6,6 +6,16 @@ This tool currently works by searching text extracted from PDF files, looking fo
 
 The next iteration will use machine learning to do this more automatically with less input. However, for now, I think it's still very useful for people to scan large numbers of receipts in an hour or two rather than the days it would otherwise take
 
+## Prerequisits
+
+* Python 3.10
+* tk
+* opencv-python
+* keyboard (Windows)
+* getkey (macOS)
+* pytesseract
+* pdf2image
+
 ## How to use the scanner
 
 ### Scanning a folder
@@ -130,9 +140,7 @@ Press Enter and the script should run
 
 ## Installation (macOS)
 
-Open Terminal
-
-You can do this by clicking on the magnifying glass in the top right hand corner of the screen.
+Open Terminal. You can do this by clicking on the magnifying glass in the top right hand corner of the screen.
 
 Type:
 
@@ -146,7 +154,7 @@ Next, you need to install **Brew**. This is a package manager for macOS. To inst
 
 Next we can install **Python**. Python is the programming language that is used to write this script. To install python simply type the following
 
-`brew install pytho`
+`brew install python`
 
 Next we need to install **Tesseract**. This is the plugin that reads an image and converts it to text using OCR character recognition. We do this by typing
 
