@@ -40,7 +40,7 @@ The Trim description can be used if you press the **T** key. You can now use the
 
 ### How to export results into a spreadsheet
 
-When you are finished checking the invoices, press the X key and it will export a CSV file to the script folder. If you have installed as per the installation instructions this folder will be on your desktop called with Invoice_scanner_Windows or Invoice_scanner_macOS
+When you are finished checking the invoices, press the X key and it will export a CSV file to the script folder. If you have installed as per the installation instructions this folder will be on your desktop called **Invoice_scanner_Windows** or **Invoice_scanner_macOS**
 
 if you load this you should see your results as a spreadsheet. This file can be easily imported into Excel or Google Sheets:
 
@@ -56,11 +56,11 @@ In the final version, it will automatically export Excel files and will allow yo
 
 https://www.microsoft.com/en-gb/download/details.aspx?id=48145
 
-When asked, select the **vc_dedist.x64.exe.**
+  When asked, select the **vc_dedist.x64.exe.**
 
-Open the **.exe** file that downloads and follow the onscreen instructions to install
+  Open the **.exe** file that downloads and follow the onscreen instructions to install
 
-**Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
+  **Note:** It is possible you already have this, or a newer update installed. If this is the case Windows will warn you and you can skip this step.
 
 2. Next you need to install **Python**. Python is the programming language the script has been made with. This can be downloaded from here.
 
