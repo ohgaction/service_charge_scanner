@@ -177,7 +177,11 @@ Double click the **.zip** file on the desktop, and it will expand into a folder:
 
 You can drag the **.zip** file to the Recycling bin now as you’re done with it.
 
-Now we’re ready to run the script. To do this, please go back to Terminal and type (or copy and paste)
+Now we’re ready to run the script. To do this, please go back to Terminal and type:
+
+`exit`
+
+This will leave super user mode. You can now copy and paste the following to launch the script:
 
 `python ~/Desktop/Invoice_scanner_macOS/OHG_Action_Receipt_Processor.py`
 
