@@ -16,6 +16,8 @@ The next iteration will use machine learning to do this more automatically with 
 * pytesseract
 * pdf2image
 
+Please follow instructions below to install on macOS or Windows, or see the PDF guides uploaded to the 'Instructions' folder
+
 ## How to use the scanner
 
 ### Scanning a folder
