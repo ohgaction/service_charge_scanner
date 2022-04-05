@@ -164,7 +164,7 @@ Next we need to install **Tesseract**. This is the plugin that reads an image an
 
 Next we need to install the **python dependencies** for the script to actually run. Please copy and paste the line below into Terminal
 
-`pip3 install tk pdf2image opencv-python json getkey pytesseract`
+`pip3 install tk pdf2image opencv-python getkey pytesseract`
 
 Now download the script from this location:
 https://github.com/ohgaction/service_charge_scanner/blob/main/downloads/invoice_scanner_macOS.zip
