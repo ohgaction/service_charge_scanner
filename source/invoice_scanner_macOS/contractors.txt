@@ -79,6 +79,3 @@ edfenergy
 Saona Cleaning Services
 PRECISION LIFT SERVICES LTD
 One Direct Maintenance Limited
-Thanks very much for agreeing to test drive this. Note that this tool is still in it's first public stages, it currently works by searching text extracted from PDF files, looking for patterns and matching them to a list of known contractors and addresses.
-Thanks very much for agreeing to test drive this. Note that this tool is still in it's first public stages, it currently works by searching text extracted from PDF files, looking for patterns and matching them to a list of known contractors and addresses.
-One Direct Maintenance Limited
