@@ -84,7 +84,7 @@ Click on the **Start** button in Windows and type **PowerShell**. Right-click on
 
 Type the following command (copy & paste) into **PowerShell** and hit enter:
 
-`pip install –upgrade pip`
+`pip install –-upgrade pip`
 
 Once pip has finished updating, please enter the following command (copy & paste).
 
@@ -148,7 +148,7 @@ Type:
 
 Press Enter. This command elevates Terminal so you can run as a super user. You will be prompted for your password. Note that when you type it, it will not display on the screen. Press enter.
 
-Next, you need to install **Brew**. This is a package manager for macOS. To install Brew simply copy and paste the entire text below into terminal and hit enter.
+Next, you need to install **Brew**. This is a package manager for macOS. To install Brew simply copy and paste the entire line below into terminal and hit enter. You will be prompted for your password again and will need to press enter a few times to accept.
 
 `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
