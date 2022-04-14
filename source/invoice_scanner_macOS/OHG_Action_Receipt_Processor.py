@@ -91,17 +91,17 @@ def write_csv(script_path,input):
 
 
 # Appeneds a contractor to the contractors.txt file
-def add_contractor(contractor):
+def add_contractor(contractor,script_path):
 
-    file = open("contractors.txt", "a")
+    file = open(f"{script_path}/contractors.txt", "a")
     file.write(f'{contractor}\n')
     file.close()
 
 
 # Appends an address to the addesses.txt file
-def add_address(address):
+def add_address(address,script_path):
 
-    file = open("addresses.txt", "a")
+    file = open(f"{script_path}/addresses.txt", "a")
     file.write(f'{address}\n')
     file.close()
 
@@ -483,9 +483,9 @@ def send_info_to_rescan(
     database[index][index_number] = value_to_add
 
     if index_number == 4:
-        add_contractor(value_to_add)
+        add_contractor(value_to_add,script_path)
     if index_number == 5:
-        add_address(value_to_add)
+        add_address(value_to_add,script_path)
     addresses, contractors, job_codes = config(script_path)
     new_database = get_multiple_invoices_rescan(
                                     database,
