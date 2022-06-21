@@ -76,6 +76,7 @@ def search_company_number(input):
 
 
 def search_total(input):
+    input = input.replace(',','')
     total = ""
     sorted_ammounts = []
     totals = re.findall(r'\d+\.\d+', input, re.MULTILINE)
@@ -132,7 +133,11 @@ def search_date(text):
                         '[\s][0-9]{2,4})'
 
     date_list = re.findall(fr'{date_regex}', text, re.MULTILINE)
-    date_list_words = re.findall(fr'{date__words_regex}', text, re.MULTILINE|re.IGNORECASE)
+    date_list_words = re.findall(
+                                    fr'{date__words_regex}',
+                                    text,
+                                    re.MULTILINE|re.IGNORECASE
+    )
 
     sorted_date_list = []
 
@@ -183,7 +188,10 @@ def date_sort(date):
                             date = datetimeobject.strftime('%Y-%m-%d')
                         except:
                             try:
-                                datetimeobject = datetime.strptime(date, '%d %b %Y')
+                                datetimeobject = datetime.strptime(
+                                                                date,
+                                                                '%d %b %Y'
+                                )
                                 date = datetimeobject.strftime('%Y-%m-%d')
                             except:
                                 date = ""
@@ -261,7 +269,7 @@ def extract_details_from_receipts(path):
         description = search_description(text)
         text_display = text.replace('\n',' ')
 
-        display_text =  f'Invoice number:\t\t{invoice_no}/{number_of_invoices}\n'\
+        display_text =  f'Invoice no:\t\t{invoice_no}/{number_of_invoices}\n'\
                         f'Filename:\t\t{invoice}\n'\
                         f'Total:\t\t\t£{total}\n'\
                         f'Date:\t\t\t{date}\n'\

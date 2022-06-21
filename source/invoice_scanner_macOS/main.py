@@ -20,28 +20,33 @@ import certifi
 from invoice_extractor import extract_details_from_receipts, convert_to_temp_jpeg
 import pandas as pd
 import numpy
+from models import Config, generate_text_line
 
-script_path = os.path.dirname(os.path.realpath(__file__))
+Config.index = 0
+Config.script_path = os.path.dirname(os.path.realpath(__file__))
+Config.thin_line = generate_text_line("thin")
+Config.thick_line = generate_text_line("thick")
+Config.path = Config.script_path
+
 
 # Saves the current state of "database" and the folder path to disk
-def save_and_quit(database, path, script_path):
+def save_and_quit(database):
     json_database = database.to_json(orient="index")
-
-    with open(os.path.join(script_path, 'data_save.dat'), 'w') as f:
+    with open(os.path.join(Config.script_path, 'data_save.dat'), 'w') as f:
         f.write(json.dumps(json_database))
-    with open(os.path.join(script_path, 'path.dat'), 'w') as f:
-        f.write(json.dumps(path))
+    with open(os.path.join(Config.script_path, 'path.dat'), 'w') as f:
+        f.write(json.dumps(Config.path))
 
 
 # Restores the last saved "database" from disk, along with the working
 # reeipt folder path
 def restore():
-    with open(os.path.join(script_path, 'data_save.dat'), 'r') as f:
+    with open(os.path.join(Config.script_path, 'data_save.dat'), 'r') as f:
         database = json.loads(f.read())
         restored_df = pd.read_json(database,orient="index")
-    with open(os.path.join(script_path, 'path.dat'), 'r') as f:
-        path = json.loads(f.read())
-    return restored_df, path
+    with open(os.path.join(Config.script_path, 'path.dat'), 'r') as f:
+        Config.path = json.loads(f.read())
+    return restored_df
 
 
 # Displays a given jpeg file to screen
@@ -56,24 +61,24 @@ def clear_screen():
 
 
 # displays a dialogue window to select an input folder
-def select_input_folder(path):
+def select_input_folder():
     selected = filedialog.askdirectory()
     if selected == '':
-        selected = script_path
+        selected = Config.script_path
     return selected
 
 
 # Processes the main menu selection options, I.e when 'f' is pressed it openes
 # a folder dialogue menu to select the input folder
-def main_menu_selection(path):
+def main_menu_selection():
     invoices = []
     while True:
         key = getkey()
         if key == "f":
-            path = select_input_folder(script_path)
-            invoices = os.listdir(os.path.expanduser(path))
+            Config.path = select_input_folder()
+            invoices = os.listdir(os.path.expanduser(Config.path))
             if invoices != []:
-                main_menu(path)
+                main_menu()
             else:
                 print("This folder is empty")
         if key == 'q':
@@ -82,83 +87,67 @@ def main_menu_selection(path):
         if key == 'p':
             if invoices != []:
                 clear_screen()
-                receipt_details = extract_details_from_receipts(path)
+                receipt_details = extract_details_from_receipts(Config.path)
                 print("Finished Extraction")
-                return receipt_details, path
+                return receipt_details
             else:
                 print("This folder is empty")
         if key == 'r':
-            receipt_details, path = restore()
+            receipt_details = restore()
             no_of_invoices = len(receipt_details.index)
-            index = 0
-            invoice_menu(receipt_details, index, no_of_invoices)
-            invoice_browser(receipt_details, index, no_of_invoices, path)
+            Config.index = 0
+            invoice_menu(receipt_details, no_of_invoices)
+            invoice_browser(receipt_details, no_of_invoices)
 
 
-# Processes the invoice screen menu options, I.e when '[' or ']' are pressed it
-# scrolls the displayed invoice up or down
-def invoice_browser(receipt_details, index, no_of_invoices, path):
+# Processes the invoice screen menu options
+def invoice_browser(receipt_details, no_of_invoices):
     last_invoice = no_of_invoices - 1
-    start = 0
-    end = 0
     while True:
         key = getkey()
         if key == "s":
-            file = receipt_details.loc[index,'Filename']
-            filename = os.path.join(path, file)
+            file = receipt_details.loc[Config.index,'Filename']
+            filename = os.path.join(Config.path, file)
             convert_to_temp_jpeg(filename)
-            display_image(os.path.join(script_path, 'temp.jpg'), file)
+            display_image(os.path.join(Config.script_path, 'temp.jpg'), file)
         if key == '.':
-            index = index + 1
-            if index > last_invoice:
-                index = last_invoice
-            invoice_menu(receipt_details, index, no_of_invoices)
+            Config.index = Config.index + 1
+            if Config.index > last_invoice:
+                Config.index  = last_invoice
+            invoice_menu(receipt_details, no_of_invoices)
         if key == ',':
-            index = index - 1
-            if index < 0:
-                index = 0
-            invoice_menu(receipt_details, index, no_of_invoices)
+            Config.index = Config.index - 1
+            if Config.index  < 0:
+                Config.index = 0
+            invoice_menu(receipt_details, no_of_invoices)
         if key == 'q':
-            save_and_quit(receipt_details, path, script_path)
+            save_and_quit(receipt_details)
             clear_screen()
             quit()
         if key == 'x':
-            receipt_details.to_excel(os.path.join(script_path, "output.xlsx"))
-            print(f"Exported to {os.path.join(script_path, 'output.xlsx')}")
-
-
-# Displays a line on screen, either 'thick' or 'thin'
-def print_line(size):
-    end = 65
-    length = 0
-    if size == "thick":
-        symbol = "="
-    if size == "thin":
-        symbol = '-'
-    line = ''
-    while length < end:
-        line = (line + symbol)
-        length = length + 1
-    return line
+            receipt_details.to_excel(os.path.join(
+                                                    Config.script_path,
+                                                    "output.xlsx"
+            ))
+            print(f"Exported to {os.path.join(Config.script_path, 'output.xlsx')}")
 
 
 # Displays the main menu
-def main_menu(path):
+def main_menu():
     clear_screen()
-    line = print_line("thick")
-    print(line)
+    print(Config.thick_line)
     print("\nInvoice Scanner - 2022 - E.Spencer")
-    print("Version 1.0 Beta")
+    print("Version 2.0 Beta")
     print("\nThis invoice extraction tool is free for personal use.")
     print("It comes with no warranty and is used entirely")
     print("at your own discretion. By proceeding you accept these terms.\n")
-    print(line)
+    print(Config.thick_line)
     print('\n[R] Restore from disk\t\t\t[P] Process')
     print('[F] Select input folder\t\t\t[Q] Quit')
-    print(f'\nInput folder:\t{path[0:49]}')
-    print(f'\t\t{path[49:102]}')
-    print(f'\t\t{path[102:147]}')
-    print(line)
+    print(f'\nInput folder:\t{Config.path[0:49]}')
+    print(f'\t\t{Config.path[49:102]}')
+    print(f'\t\t{Config.path[102:147]}')
+    print(Config.thick_line)
 
 
 # Displays the invoice within the invoice menu, and permits the user to scroll
@@ -181,37 +170,38 @@ def display_invoice(input):
 
 
 # This displays the standard menu within terminal for browsing invoices
-def invoice_menu(receipt_details,index,no_of_invoices):
-    invoice_num = index + 1
+def invoice_menu(receipt_details, no_of_invoices):
+    invoice_num = Config.index + 1
     clear_screen()
 
-    line1 = print_line("thick")
-    line2 = print_line("thin")
+    top_menu = \
+                f'{Config.thick_line}\n'\
+                f'Invoice {invoice_num}/{no_of_invoices}\n'\
+                f'{Config.thin_line}\n'\
+                'Press < or > to move between invoices\n'\
+                f'{Config.thin_line}\n'\
+                'Extracted Text:\n'\
+                f'{Config.thick_line}'
 
-    print(line1)
-    print(f"Invoice {invoice_num}/{no_of_invoices}")
-    print(line2)
-    print('Press < or > to move between invoices')
-    print(line2)
-    print('Extracted Text:')
-    print(line1)
+    print(top_menu)
 
     display_invoice(
-            receipt_details.loc[index,'Extracted Text']
+            receipt_details.loc[Config.index,'Extracted Text']
     )
 
-    filename = receipt_details.loc[index,'Filename']
-    total = receipt_details.loc[index,'Total']
-    date = receipt_details.loc[index,'Invoice Date']
-    company_name = receipt_details.loc[index,'Company Name']
-    company_number = receipt_details.loc[index,'Company Number']
-    company_post_code = receipt_details.loc[index,'Company Post Code']
-    category = receipt_details.loc[index,'Category']
-    description = receipt_details.loc[index,'Description']
+    filename = receipt_details.loc[Config.index,'Filename']
+    total = receipt_details.loc[Config.index,'Total']
+    date = receipt_details.loc[Config.index,'Invoice Date']
+    company_name = receipt_details.loc[Config.index,'Company Name']
+    company_number = receipt_details.loc[Config.index,'Company Number']
+    company_post_code = receipt_details.loc[Config.index,'Company Post Code']
+    category = receipt_details.loc[Config.index,'Category']
+    description = receipt_details.loc[Config.index,'Description']
 
-    print(line1)
+    print(Config.thick_line)
 
-    invoice_details = f'{"File Name:":<20}{filename[0:45]:<30}\n'\
+    invoice_details = \
+                f'{"File Name:":<20}{filename[0:45]:<30}\n'\
                 f'{"Total:":<20}{total:<30}\n'\
                 f'{"Date":<20}{date:<30}\n'\
                 f'{"Company Name:":<20}{company_name[0:45]:<30}\n'\
@@ -224,22 +214,22 @@ def invoice_menu(receipt_details,index,no_of_invoices):
                 f'{"":<20}{description[135:180]:<30}\n'\
 
     print(invoice_details)
-    print(line2)
+    print(Config.thin_line)
     print('[S] Show orginal invoice file')
-    print(line2)
+    print(Config.thin_line)
     print('[X] Eport\t\t\t\t[Q] Save and Quit')
-    print(line1)
+    print(Config.thick_line)
     return
 
 
 # Main function, launches main menu
 def main():
-    main_menu(script_path)
-    receipt_details, path = main_menu_selection(script_path)
+    main_menu()
+    receipt_details = main_menu_selection()
     no_of_invoices = len(receipt_details.index)
-    index = 0
-    invoice_menu(receipt_details, index, no_of_invoices)
-    invoice_browser(receipt_details, index, no_of_invoices, path)
+    invoice_menu(receipt_details, no_of_invoices)
+    invoice_browser(receipt_details, no_of_invoices)
+
 
 if __name__ == '__main__':
     main()

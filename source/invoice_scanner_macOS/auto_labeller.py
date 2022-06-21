@@ -50,7 +50,7 @@ def build_auto_classifier():
         classifier = LogisticRegression()
         classifier.fit(X_train, y_train)
         score = classifier.score(X_test, y_test)
-        #print('Accuracy for {} data: {:.4f}'.format(source, score))
+        print('Accuracy for {} data: {:.4f}'.format(source, score))
 
     return vectorizer, classifier
 
