@@ -4,10 +4,11 @@ import pathlib
 import cv2
 import pytesseract
 import pandas as pd
+
 from pytesseract import Output
 from pdf2image import convert_from_path
-from tkinter import *
-from tkinter import filedialog
+#from tkinter import *
+#from tkinter import filedialog
 
 from datetime import datetime
 from models import Company
@@ -15,7 +16,6 @@ from db_setup import init_db, db_session
 from auto_labeller import build_auto_classifier, auto_classifier
 
 from fuzzysearch import find_near_matches
-
 from thefuzz import fuzz
 from thefuzz import process
 

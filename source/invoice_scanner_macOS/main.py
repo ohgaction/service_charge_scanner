@@ -4,23 +4,21 @@ import cv2
 import re
 import os
 import json
-import shutil
 import pathlib
-import pytesseract
-from pytesseract import Output
-from datetime import datetime
+import pandas as pd
+import subprocess
+import applescript
+#from pytesseract import Output
+#from datetime import datetime
 from getkey import getkey
-from tkinter import *
 from tkinter import filedialog
 from PIL import Image
 from pdf2image import convert_from_path
-from auto_labeller import build_auto_classifier, auto_classifier
-import ssl
-import certifi
-from invoice_extractor import extract_details_from_receipts, convert_to_temp_jpeg
-import pandas as pd
-import numpy
+
 from models import Config, generate_text_line
+from auto_labeller import build_auto_classifier, auto_classifier
+from invoice_extractor import extract_details_from_receipts
+from invoice_extractor import convert_to_temp_jpeg
 
 Config.index = 0
 Config.script_path = os.path.dirname(os.path.realpath(__file__))
@@ -222,8 +220,16 @@ def invoice_menu(receipt_details, no_of_invoices):
     return
 
 
+def resize_window():
+    command = applescript.tell.app("Terminal",'''
+    set bounds of window 1 to {50, 90, 650, 910}
+    ''')
+    assert command.code == 0, command.err
+
+
 # Main function, launches main menu
 def main():
+    resize_window()
     main_menu()
     receipt_details = main_menu_selection()
     no_of_invoices = len(receipt_details.index)
