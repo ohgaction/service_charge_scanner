@@ -8,8 +8,6 @@ import pathlib
 import pandas as pd
 import subprocess
 import applescript
-#from pytesseract import Output
-#from datetime import datetime
 from getkey import getkey
 from tkinter import filedialog
 from PIL import Image
@@ -17,8 +15,8 @@ from pdf2image import convert_from_path
 
 from models import Config, generate_text_line
 from auto_labeller import build_auto_classifier, auto_classifier
-from invoice_extractor import extract_details_from_receipts
-from invoice_extractor import convert_to_temp_jpeg
+from invoice_extractor import extract_details_from_receipts, sort_invoice_files
+from invoice_extractor import convert_to_temp_jpeg, get_file_extension
 
 Config.index = 0
 Config.script_path = os.path.dirname(os.path.realpath(__file__))
@@ -28,8 +26,8 @@ Config.path = Config.script_path
 
 
 # Saves the current state of "database" and the folder path to disk
-def save_and_quit(database):
-    json_database = database.to_json(orient="index")
+def save_and_quit(receipt_details):
+    json_database = receipt_details.to_json(orient="index")
     with open(os.path.join(Config.script_path, 'data_save.dat'), 'w') as f:
         f.write(json.dumps(json_database))
     with open(os.path.join(Config.script_path, 'path.dat'), 'w') as f:
@@ -40,11 +38,11 @@ def save_and_quit(database):
 # reeipt folder path
 def restore():
     with open(os.path.join(Config.script_path, 'data_save.dat'), 'r') as f:
-        database = json.loads(f.read())
-        restored_df = pd.read_json(database,orient="index")
+        json_database = json.loads(f.read())
+        receipt_details = pd.read_json(json_database,orient="index")
     with open(os.path.join(Config.script_path, 'path.dat'), 'r') as f:
         Config.path = json.loads(f.read())
-    return restored_df
+    return receipt_details
 
 
 # Displays a given jpeg file to screen
@@ -59,7 +57,7 @@ def clear_screen():
 
 
 # displays a dialogue window to select an input folder
-def select_input_folder():
+def select_folder_diag():
     selected = filedialog.askdirectory()
     if selected == '':
         selected = Config.script_path
@@ -68,28 +66,32 @@ def select_input_folder():
 
 # Processes the main menu selection options, I.e when 'f' is pressed it openes
 # a folder dialogue menu to select the input folder
-def main_menu_selection():
+def main_menu_selection(receipt_details):
     invoices = []
     while True:
         key = getkey()
         if key == "f":
-            Config.path = select_input_folder()
-            invoices = os.listdir(os.path.expanduser(Config.path))
+            Config.path = select_folder_diag()
+            # invoices = os.listdir(os.path.expanduser(Config.path))
+            invoices = sort_invoice_files(Config.path)
             if invoices != []:
                 main_menu()
             else:
-                print("This folder is empty")
+                print("This folder has no PDF files")
         if key == 'q':
+            save_and_quit(receipt_details)
             clear_screen()
             quit()
         if key == 'p':
+            # invoices = os.listdir(os.path.expanduser(Config.path))
+            invoices = sort_invoice_files(Config.path)
             if invoices != []:
                 clear_screen()
                 receipt_details = extract_details_from_receipts(Config.path)
                 print("Finished Extraction")
                 return receipt_details
             else:
-                print("This folder is empty")
+                print("This folder has no PDF files")
         if key == 'r':
             receipt_details = restore()
             no_of_invoices = len(receipt_details.index)
@@ -123,11 +125,21 @@ def invoice_browser(receipt_details, no_of_invoices):
             clear_screen()
             quit()
         if key == 'x':
-            receipt_details.to_excel(os.path.join(
-                                                    Config.script_path,
-                                                    "output.xlsx"
-            ))
-            print(f"Exported to {os.path.join(Config.script_path, 'output.xlsx')}")
+            clear_screen()
+            while True:
+                filename = input("Please enter file name: ")
+                if filename != "":
+                    output_folder = select_folder_diag()
+                    receipt_details.to_excel(os.path.join(
+                                                            output_folder,
+                                                            f"{filename}.xlsx"
+                    ))
+                    invoice_menu(receipt_details, no_of_invoices)
+                    print(
+                            f"Exported to "\
+                            f"{os.path.join(output_folder,f'{filename}.xlsx')}"
+                    )
+                    break
 
 
 # Displays the main menu
@@ -220,18 +232,20 @@ def invoice_menu(receipt_details, no_of_invoices):
     return
 
 
+# Resizes the Terminal (OSX) window using Apple Script
 def resize_window():
     command = applescript.tell.app("Terminal",'''
-    set bounds of window 1 to {50, 90, 650, 910}
+    set bounds of window 1 to {50, 90, 530, 950}
     ''')
     assert command.code == 0, command.err
 
 
 # Main function, launches main menu
 def main():
+    receipt_details = restore()
     resize_window()
     main_menu()
-    receipt_details = main_menu_selection()
+    receipt_details = main_menu_selection(receipt_details)
     no_of_invoices = len(receipt_details.index)
     invoice_menu(receipt_details, no_of_invoices)
     invoice_browser(receipt_details, no_of_invoices)

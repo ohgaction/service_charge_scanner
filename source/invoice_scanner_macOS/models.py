@@ -27,12 +27,14 @@ class Config:
                     path,
                     line_thin,
                     line_thick,
+                    receipt_details
     ):
         self.index
         self.script_path
         self.path
         self.line_thin
         self.line_thick
+        self.receipt_details
 
 
 # Displays a line on screen, either 'thick' or 'thin'

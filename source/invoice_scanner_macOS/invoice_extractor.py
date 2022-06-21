@@ -47,7 +47,7 @@ def get_file_extension(file):
     return file_extension
 
 
-def get_invoice_files(path):
+def sort_invoice_files(path):
     invoices = os.listdir(os.path.expanduser(path))
     invoices_sorted = []
     for file in invoices:
@@ -222,7 +222,7 @@ def extract_details_from_receipts(path):
 
     return_data = pd.DataFrame()
 
-    invoices_sorted = get_invoice_files(path)
+    invoices_sorted = sort_invoice_files(path)
     invoices_sorted.sort()
 
     contractor_details = pd.read_csv(
@@ -230,7 +230,7 @@ def extract_details_from_receipts(path):
                                         "training_data/contractor_details.csv"
     ))
 
-    number_of_invoices = len(invoices_sorted) - 1
+    number_of_invoices = len(invoices_sorted)
     invoice_no = 1
 
     for invoice in invoices_sorted:
@@ -276,8 +276,8 @@ def extract_details_from_receipts(path):
                         f'Company Name:\t\t{company_name}\n'\
                         f'Company Number:\t\t{company_num}\n'\
                         f'Company Post Code:\t{company_post_code}\n'\
-                        f'Category:\t\t{company_category}\n'\
-                        f'Description:\t\t{description}\n\n'\
+                        f'Category:\t\t{company_category[0:35]}\n'\
+                        f'Description:\t\t{description[0:35]}...\n\n'\
 
         if company_name == "":
             additional =f'--------------------------------------\n'\
