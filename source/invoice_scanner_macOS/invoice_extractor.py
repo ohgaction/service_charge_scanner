@@ -1,23 +1,22 @@
+#!/usr/bin/env python3
+
 import re
 import os
 import pathlib
 import cv2
-import pytesseract
 import pandas as pd
 
+import pytesseract
 from pytesseract import Output
 from pdf2image import convert_from_path
-#from tkinter import *
-#from tkinter import filedialog
-
 from datetime import datetime
-from models import Company
-from db_setup import init_db, db_session
-from auto_labeller import build_auto_classifier, auto_classifier
-
 from fuzzysearch import find_near_matches
 from thefuzz import fuzz
 from thefuzz import process
+
+from models import Company
+from db_setup import init_db, db_session
+from auto_labeller import build_auto_classifier, auto_classifier
 
 
 init_db()
@@ -111,7 +110,7 @@ def search_contractor(contractor_details, input, filename):
         matches = find_near_matches(contractor, text, max_l_dist=1)
         if matches != []:
             for m in matches:
-               score = fuzz.ratio(contractor,m.matched)
+               score = fuzz.ratio(contractor, m.matched)
                if score > 90:
                    return row["ContractorName"], row["ContractorCompanyNumber"]
     contractor = ""
@@ -201,7 +200,7 @@ def date_sort(date):
 def extract_details_using_csv_values(
                                         company_name, contractor_number,
                                         company_num, company_post_code,
-                                        company_category, method
+                                        company_category
 ):
     if contractor_number != "":
         companies = search_company_number(contractor_number)
@@ -210,11 +209,10 @@ def extract_details_using_csv_values(
             company_num = company.CompanyNumber
             company_post_code = company.RegAddress_PostCode
             company_category = company.SICCode_SicText_1
-            method = "CSV Match"
 
     return (
             company_name, company_num,
-            company_post_code, company_category, method
+            company_post_code, company_category
     )
 
 
@@ -239,7 +237,6 @@ def extract_details_from_receipts(path):
         company_num = ""
         company_post_code = ""
         company_category = ""
-        method = ""
         contractor = ""
         contractor_number = ""
 
@@ -258,10 +255,10 @@ def extract_details_from_receipts(path):
         if contractor_number != "":
             company_name, company_num,\
             company_post_code,\
-            company_category, method = extract_details_using_csv_values(
+            company_category = extract_details_using_csv_values(
                                                 company_name, contractor_number,
                                                 company_num, company_post_code,
-                                                company_category, method
+                                                company_category
             )
 
         date = search_date(text)

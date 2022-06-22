@@ -18,6 +18,7 @@ from auto_labeller import build_auto_classifier, auto_classifier
 from invoice_extractor import extract_details_from_receipts, sort_invoice_files
 from invoice_extractor import convert_to_temp_jpeg, get_file_extension
 
+
 Config.index = 0
 Config.script_path = os.path.dirname(os.path.realpath(__file__))
 Config.thin_line = generate_text_line("thin")
