@@ -293,7 +293,8 @@ def extract_details_from_receipts(path):
                     'Company Post Code': [company_post_code],
                     'Category': [company_category],
                     'Description': [description],
-                    'Extracted Text': [text]
+                    'Extracted Text': [text],
+                    'PDF File Path': [path]
         })
 
         return_data = pd.concat(

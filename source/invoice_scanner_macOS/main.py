@@ -108,7 +108,8 @@ def invoice_browser(receipt_details, no_of_invoices):
         key = getkey()
         if key == "s":
             file = receipt_details.loc[Config.index,'Filename']
-            filename = os.path.join(Config.path, file)
+            file_path = receipt_details.loc[Config.index,'PDF File Path']
+            filename = os.path.join(file_path, file)
             convert_to_temp_jpeg(filename)
             display_image(os.path.join(Config.script_path, 'temp.jpg'), file)
         if key == '.':
@@ -131,7 +132,9 @@ def invoice_browser(receipt_details, no_of_invoices):
                 filename = input("Please enter file name: ")
                 if filename != "":
                     output_folder = select_folder_diag()
-                    receipt_details.to_excel(os.path.join(
+                    pd2excel = receipt_details.drop(columns='Extracted Text')
+                    pd2excel = pd2excel.drop(columns='PDF File Path')
+                    pd2excel.to_excel(os.path.join(
                                                             output_folder,
                                                             f"{filename}.xlsx"
                     ))
